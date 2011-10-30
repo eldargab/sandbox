@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Jasmine Spec Runner</title>
+	<link rel="stylesheet" type="text/css" href="/tools/jasmine/jasmine.css">
+	<script type="text/javascript" src="/tools/jasmine/jasmine.js"></script>
+	<script type="text/javascript" src="/tools/jasmine/jasmine-html.js"></script>
+	<script type="text/javascript" src="/tools/sinon.js"></script>
+	<script type="text/javascript" src="/tools/jasmine-sinon.js"></script>
+
+	<script type="text/javascript">
+		function runTests() {
+			var jasmineEnv = jasmine.getEnv();
+			jasmineEnv.updateInterval = 1000;
+
+			var trivialReporter = new jasmine.TrivialReporter();
+
+			jasmineEnv.addReporter(trivialReporter);
+
+			jasmineEnv.specFilter = function(spec) {
+				return trivialReporter.specFilter(spec);
+			};
+
+			jasmineEnv.execute();
+		}
+	</script>
+
+	<script type="text/javascript">
+		var require = {
+			baseUrl: "/src",
+			"packages": ['lib/async'],
+			deps: [
+				//"splitStringTest.js",
+				//"indexedDbTest.js"
+				"wordsDbTest.js"
+			],
+			ready: runTests
+		};
+	</script>
+
+	<script type="text/javascript" src="/tools/require.js"></script>
+</head>
+
+<body>
+</body>
+</html>
