@@ -1,4 +1,8 @@
-define(['./lib/asyncLoop', './lib/js'], function (asyncLoop, js) {
+define([
+	'./lib/js',
+   	'./lib/asyncLoop',
+   	'./lib/accumulators' 
+], function (js, asyncLoop, acc) {
 
 var base = {};
 var END_OF_STREAM = base.END_OF_STREAM = {};
@@ -97,12 +101,6 @@ base.bind = function (app, streams) {
 	}
 }
 
-base.connect = function (upstream, downstream) {
-	return function (callback) {
-		downstream(upstream, callback);
-	}
-}
-
 base.map = function (stream, app) {
 	return base.bind(app, [stream]);
 }
@@ -121,14 +119,14 @@ base.foreach = function (stream, app) {
 	});
 }
 
-base.accumulate = function (upstream, accumulator) {
+base.fold = function (upstream, accumulator) {
 	return function accumulate (callback) {
 		var accumulatedValue;
 
 		asyncLoop(upstream, function (error) {
 			if (error === END_OF_STREAM) {
 				if (accumulatedValue === undefined && accumulator.def) {
-					accumulatedValue = new accumulator.def;
+					accumulatedValue = new accumulator.def();
 				}
 				callback(undefined, accumulatedValue);
 				return true;
@@ -139,6 +137,41 @@ base.accumulate = function (upstream, accumulator) {
 			}
 			arguments[0] = accumulatedValue;
 			accumulatedValue = accumulator.apply(undefined, arguments);
+		});
+	}
+}
+
+base.unfold = function (upstream, generatorFactory) {
+	return unfold;
+
+	var stream;
+
+	function unfold (callback) {
+		if (!stream) {
+			asyncLoop(upstream, function (error) {
+				if (error) {
+					callback(error);
+					return true;
+				}
+				stream = generatorFactory.apply(undefined, js.slice(arguments, 1));	
+				if (!stream)
+					return false;
+				pullFromStream(callback);
+				return true;
+			});
+			return;
+		}
+		pullFromStream(callback);	
+	}
+
+	function pullFromStream (callback) {
+		stream(function (error) {
+			if (error === END_OF_STREAM) {
+				stream = null;
+				unfold(callback)
+				return;
+			}
+			callback.apply(undefined, arguments);
 		});
 	}
 }
@@ -154,17 +187,19 @@ base.toStream = function (val) {
 base.sync2async = function (fn) {
 	return function () {
 		var params = parseAppParams(arguments);
+		var callbackNotCalled = true;
 		
 		js.console.log('Called ' + fn.name + ' with ' + params.args.toString());
 
 		var callback = function (error) {
 			if (error) {
-				js.console.error('___ throwed ' + error);
+				js.console.error('___' + fn.name + ' throwed ' + error);
 			}
 			else {
 				var args = js.toArray(arguments);
-				js.console.log('___ returned ' + args.slice(1).toString());
+				js.console.log('___' + fn.name + ' returned ' + args.slice(1).toString());
 			}
+			callbackNotCalled = false;
 			params.callback.apply(undefined, arguments);
 		};
 
@@ -172,10 +207,13 @@ base.sync2async = function (fn) {
 			var returnedValue = fn.apply(undefined, params.args.concat(callback));
 		}
 		catch (e) {
-			callback(e);
-			return;
+			if (callbackNotCalled) {
+				callback(e);
+				return;
+			}
+			js.console.error(e);
 		}
-		if (returnedValue !== undefined) {
+		if (returnedValue !== undefined && callbackNotCalled) {
 			callback(undefined, returnedValue);
 		}
 	}	

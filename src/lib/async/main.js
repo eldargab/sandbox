@@ -3,6 +3,7 @@ define([
 	   './base',
 	   './builder',
 	   './node',
+	   './generators',
 	   './controls',
 	   './lib/accumulators'
 ],
@@ -11,6 +12,7 @@ function (
 	base, 
 	builder,
 	node,
+	gen,
 	ctr, 
 	acc
 ) {
@@ -22,6 +24,7 @@ function (
 	lib.proc = builder.proc;
 	lib.chain = builder.chain;
 	lib.node = node;
+	lib.gen = gen;
 	js.extend(lib, ctr);
 	
 	lib.c = function () {

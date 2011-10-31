@@ -239,7 +239,7 @@ idb.getObjectsStream = function (store, range) {
 idb.getAll = function (store, range, callback) {
 	a.chain
 		(idb.getObjectsStream(store, range))
-		(a.node.toArray)
+		(a.node.fold)
 	()
 	(callback);
 }

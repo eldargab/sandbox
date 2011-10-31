@@ -33,7 +33,7 @@ function WordsDb (src, DB_NAME) {
 			(function getWord (index, cb) {
 				idb.getByKey(articles, index.id, cb);
 			})
-			(a.node.toArray)
+			(a.node.fold)
 		()
 		(function (error, variants) {
 			if (error) {
