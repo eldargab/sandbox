@@ -21,7 +21,7 @@ function WordsDb (src, DB_NAME) {
 		isReady = true;
 	});
 
-	this.findWord = function (word, callback) {
+	this.findArticles = function (word, callback) {
 		if (returnErrorIfNotReady(callback)) return;
 
 		var t = db.transaction(['index', 'articles']);
@@ -33,15 +33,12 @@ function WordsDb (src, DB_NAME) {
 			(function getWord (index, cb) {
 				idb.getByKey(articles, index.id, cb);
 			})
+			(a.node.catch, function (error, cb) {
+				returnError(cb, REQUEST_ERR, error);
+			})
 			(a.node.fold)
 		()
-		(function (error, variants) {
-			if (error) {
-				returnError(callback, REQUEST_ERR, error);
-				return;
-			}
-			callback(undefined, variants);	
-		});
+		(callback);
 	}
 
 	this.close = function () {

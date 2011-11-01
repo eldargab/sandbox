@@ -33,7 +33,7 @@ describe('Word articles database', function () {
 		()
 
 		function checkFind (word, expectedResults, callback) {
-			db.findWord(word, function (error, results) {
+			db.findArticles(word, function (error, results) {
 				if (error) {
 					callback(error)
 					return;
@@ -58,7 +58,7 @@ describe('Word articles database', function () {
 		});
 	});
 
-	it('When initialization not complete, responds immediatly with NOT_READY_ERR', function () {
+	xit('When initialization not complete, responds immediatly with NOT_READY_ERR', function () {
 	});
 
 	xit('When error occured during initialization, responds with INIT_ERR', function () {

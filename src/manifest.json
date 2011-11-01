@@ -1,0 +1,15 @@
+{
+	"name": "Арабско-русский словарь Баранова",
+	"version": "0.1",
+	"description": "Арабско-русский словарь Баранова",
+	"background_page": "background.html",
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"css": ["style.css"],
+			"js": ["lib/splitString.js", "lib/getTargetWordOfDomEvent.js", "contentScript.js"],
+			"run_at": "document_end",
+			"all_frames": true
+		}
+	]
+}

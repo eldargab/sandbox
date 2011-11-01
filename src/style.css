@@ -1,0 +1,24 @@
+﻿.arabic-dict-popup 
+{
+    background: #FFC;
+    width: 250px;
+    padding: 5px; 
+    border: 2px solid #DC7;
+    border-radius: 4px;  
+    z-index: 9999999;
+    font-weight: normal;
+    font-style: normal;
+    direction: ltr;
+    text-align: left;         
+}
+.arabic-dict-word
+{
+    font-family: Cambria;
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.arabic-dict-translation
+{
+    font-family: Calibri;
+}

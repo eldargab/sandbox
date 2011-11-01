@@ -1,13 +1,23 @@
 define(function () {
 var html = function () {
 	var htmlString = [];
-	return function read (obj) {
+	
+	return read.apply(undefined, arguments);
+
+	function read (obj) {
 		if (obj === undefined)
 			return htmlString.join('');
+		if (typeof obj == 'function') {
+			var fn = obj;
+			arguments[0] = read;
+			return fn.apply(undefined, arguments);
+		}
 		htmlString.push(obj);
 		return read;
 	}
 }
+
+html.tags = {};
 
 var tags = [
 	// open
@@ -27,7 +37,7 @@ var tags = [
 
 for (var isVoid = 0, names; names = tags[isVoid]; isVoid++) {
 	for (var i = 0, name; name = names[i++];) {
-		html[name] = elem(name.toLowerCase(), !! isVoid);
+		html.tags[name] = elem(name.toLowerCase(), !! isVoid);
 	}
 }
 

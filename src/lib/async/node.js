@@ -16,6 +16,18 @@ var node = function (write, nodeFactory) {
 }
 builder.markAsControl(node);
 
+node.catch = builderNodeApp(function (upstream, app) {
+	return function catchNode (cb) {
+		upstream(function (error) {
+			if (error && error !== base.END_OF_STREAM) {
+				app(error, cb);
+				return;
+			}
+			cb.apply(undefined, arguments);
+		});
+	}	
+});
+
 node.foreach = builderNodeApp(base.foreach);
 
 node.fold = nodeApp(function (upstream, accumulator) {
