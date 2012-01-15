@@ -4,7 +4,7 @@ module.exports = function createScriptLoader () {
     function load (name, cb) {
         var script = load.scripts[name];
         if (!script) {
-            console.log('Attempt to load undefined resource ' + name);
+            // console.log('Attempt to load undefined resource ' + name);
             cb(new Error('Resource ' + name + ' not found'));
             return;
         }

@@ -18,6 +18,7 @@ function resetState () {
     req.modules = {}
     req.packages = {}
     req.loading = {}
+    req.baseUrl = undefined
 }
 
 describe('Client-side `require`', function () {
@@ -118,6 +119,15 @@ describe('Client-side `require`', function () {
         it('If error occured during script fetching callback is not called', function () {
             req(['a'], cb);
             cb.called.should.be.false;
+        });
+
+        it('Supports setting of base url for all module lookups', function () {
+            req.baseUrl = 'script';
+            req.loadScript = sinon.spy();
+        
+            req(['a'])
+
+            req.loadScript.calledWith('script/a.js').should.be.true;
         });
     });
     
