@@ -15,14 +15,14 @@ module.exports = function createScriptLoader () {
 
     load.scripts = {};
 
-    load.script = function (name, deps) {
+    load.script = function (name, deps, mod) {
         load.scripts[name] = {
             name: name,
             deps: deps,
             called: false,
             complete: function () {
                 if (!this.called) throw new Error('Loading of ' + name + ' wasnt requested');
-                regModule(name, name.split('/').join(''), deps);
+                regModule(name, mod || name.split('/').join(''), deps);
                 this.cb();
             }
         }

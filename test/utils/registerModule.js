@@ -12,6 +12,7 @@ module.exports = function regModule (name, exports, deps) {
         if (exports)
             module.exports = exports;
     }
+    m.isCalled = false;
     req.register(name, deps, m);
     return m;
 }

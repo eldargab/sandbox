@@ -6,8 +6,8 @@ var regModule = require('./utils/registerModule');
 var createScriptLoader = require('./utils/createScriptLoader');
 
 
-function defScript (name, deps) {
-    req.loadScript.script(name, deps);
+function defScript (name, deps, mod) {
+    req.loadScript.script(name, deps, mod);
 }
 
 function script (name) {
@@ -105,6 +105,18 @@ describe('Client-side `require`', function () {
             cb.calledOnce.should.be.true;
         });
 
+        it('Works inside module', function () {
+            defScript('a/c.js');
+            regModule('a/b.js', function (r) {
+                r(['./c'], cb);
+            });
+
+            req('a/b');
+            cb.called.should.be.false;
+            script('a/c.js').complete();
+            cb.calledOnce.should.be.true;
+        });
+
         it('Handles circular dependencies', function () {
             defScript('a.js', ['b']);
             defScript('b.js', ['a']);
@@ -129,7 +141,40 @@ describe('Client-side `require`', function () {
 
             req.loadScript.calledWith('script/a.js').should.be.true;
         });
+
+        describe('require.launch', function () {
+            it('fetches specified modules and requires them', function () {
+                var a = sinon.spy();
+                var b = sinon.spy();
+                defScript('a.js', null, a);
+                defScript('b.js', null, b);
+
+                req.launch('a', 'b');
+
+                script('a.js').complete();
+                script('b.js').complete();
+
+                a.calledOnce.should.be.true;
+                b.calledOnce.should.be.true;
+            });
+
+            it('Works inside modules', function () {
+                var ac = sinon.spy();
+                defScript('a/c.js', null, ac);
+
+                regModule('a/b', function (r) {
+                    debugger;
+                    r.launch('./c');
+                });
+
+                req('a/b');
+                debugger;
+                script('a/c.js').complete();
+                
+                ac.calledOnce.should.be.true;
+            });
+        });
     });
-    
+
 });
 
