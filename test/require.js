@@ -43,7 +43,6 @@ describe('Client-side `require`', function () {
             r('./d').should.equal('acd');
             r('../b').should.equal('ab');
             r('e/g').should.equal('eg');
-            r('/e/g').should.equal('eg');
             runned = true;
         });
 
@@ -136,10 +135,12 @@ describe('Client-side `require`', function () {
         it('Supports setting of base url for all module lookups', function () {
             req.baseUrl = 'script';
             req.loadScript = sinon.spy();
-        
             req(['a'])
-
             req.loadScript.calledWith('script/a.js').should.be.true;
+
+            req.baseUrl = '/script';
+            req(['b']);
+            req.loadScript.calledWith('/script/b.js').should.be.true;
         });
 
         describe('require.launch', function () {
