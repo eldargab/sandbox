@@ -1,19 +1,18 @@
-var regModule = require('./registerModule');
+var regModule = require('./registerModule')
 
-module.exports = function createScriptLoader () {
+module.exports = function createScriptLoader (req) {
     function load (name, cb) {
-        var script = load.scripts[name];
+        var script = load.scripts[name]
         if (!script) {
-            // console.log('Attempt to load undefined resource ' + name);
-            cb(new Error('Resource ' + name + ' not found'));
-            return;
+            cb(new Error('Resource ' + name + ' not found'))
+            return
         }
-        if (script.called) throw new Error('Attempt to load resource ' + name + ' twice');
-        script.called = true;
-        script.cb = cb;
+        if (script.called) throw new Error('Attempt to load resource ' + name + ' twice')
+        script.called = true
+        script.cb = cb
     }
 
-    load.scripts = {};
+    load.scripts = {}
 
     load.script = function (name, deps, mod) {
         load.scripts[name] = {
@@ -21,13 +20,13 @@ module.exports = function createScriptLoader () {
             deps: deps,
             called: false,
             complete: function () {
-                if (!this.called) throw new Error('Loading of ' + name + ' wasnt requested');
-                regModule(name, mod || name.split('/').join(''), deps);
-                this.cb();
+                if (!this.called) throw new Error('Loading of ' + name + ' wasnt requested')
+                regModule(req, name, mod || name.split('/').join(''), deps)
+                this.cb()
             }
         }
-        return load.scripts[name];
+        return load.scripts[name]
     }
 
-    return load;
+    return load
 }

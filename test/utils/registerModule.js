@@ -1,18 +1,16 @@
-var req = require('../..');
-
-module.exports = function regModule (name, exports, deps) {
+module.exports = function regModule (req, name, exports, deps) {
     function m (exp, module, r) {
-        if (m.isCalled) throw new Error('Module fn called twice');
-        m.isCalled = true;
+        if (m.isCalled) throw new Error('Module fn called twice')
+        m.isCalled = true
 
         if (typeof exports == 'function') {
-            exports(r, exp);
-            return;
+            exports(r, exp)
+            return
         }
         if (exports)
-            module.exports = exports;
+            module.exports = exports
     }
-    m.isCalled = false;
-    req.register(name, deps, m);
-    return m;
+    m.isCalled = false
+    req.register(name, m, deps)
+    return m
 }
