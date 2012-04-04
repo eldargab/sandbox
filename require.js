@@ -71,30 +71,12 @@ window.require = (function () {
 
 (function (req) {
     var getModule = req.getModule
-    var relative = req.relative
 
     req.getModule = function (from, p, cb) {
         if (Array.isArray(p)) // async require
             return _satisfyDependencies({deps: p, dir: from}, [], cb || NOOP)
         return getModule(from, p)
     }
-
-    req.launch = function (var_modules) {
-        var modules = Array.prototype.slice.call(arguments)
-        var r = this
-        r(modules, function () {
-            modules.forEach(function (mod) {
-                r(mod)
-            })
-        })
-    }
-
-    req.relative = function (from) {
-        var r = relative(from)
-        r.launch = req.launch
-        return r
-    }
-
 
     function _satisfyDependencies (module, dependents, callback) {
         if (module.isDepsSatisfied) return callback()
@@ -210,6 +192,24 @@ window.require = (function () {
     }
 
     function NOOP () { }
+
+    var relative = req.relative
+
+    req.launch = function (var_modules) {
+        var modules = Array.prototype.slice.call(arguments)
+        var r = this
+        r(modules, function () {
+            modules.forEach(function (mod) {
+                r(mod)
+            })
+        })
+    }
+
+    req.relative = function (from) {
+        var r = relative(from)
+        r.launch = req.launch
+        return r
+    }
 
     return req
 })(window.require)

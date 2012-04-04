@@ -61,7 +61,7 @@ describe('Client-side `require`', function () {
         req('a.js').should.equal('a')
     })
 
-    describe('async module loading and require', function () {
+    describe('async module loading', function () {
         var cb
 
         beforeEach(function () {
