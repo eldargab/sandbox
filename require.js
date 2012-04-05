@@ -88,7 +88,7 @@ window.require = (function () {
             if (dependents.indexOf(path) >= 0) return // It's circular dependency.
             var cb = t.cb()
             load(path, function () {
-                var m = req.modules[path]
+                var m = req.modules[req.resolveModule(module.dir, dep)]
                 if (!m) {
                     console.error('Module `' + path + '` was not found at expected location')
                     return
