@@ -1,0 +1,31 @@
+#!/bin/bash
+
+command=(tar)
+
+cmd() {
+  for arg in "$@"; do
+    command+=("$arg")
+  done
+}
+
+cmd --file "$1"
+
+if test -z $2; then
+  cmd --extract
+elif test '--list' = $2; then
+  cmd --list
+else
+  if test ! -d "$2"; then
+    mkdir -p "$2" || exit 1
+  fi
+  cmd --extract
+  cmd -C "$2"
+fi
+
+if echo $1 | grep \.bz2$ &> /dev/null; then
+  cmd -j
+elif echo $1 | grep \.gz$ &> /dev/null; then
+  cmd -z
+fi
+
+"${command[@]}"
