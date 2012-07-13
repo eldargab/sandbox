@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+var map = require('./lib/symbols-map')
+
+for (var key in map) {
+    console.log(key + ' -> ' + map[key])
+}
