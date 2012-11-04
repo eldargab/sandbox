@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+var mkdir = require('mkdirp').sync
+var PATH = require('path')
+var join = PATH.join
+var write = require('fs').writeFileSync
+var Builder = require('component-builder')
+var rework = require('rework')
+
+program
+  .option('-o, --out <dir>', 'Output directory', 'build')
+  .option('-n, --name <file>', 'Base name for output files', 'build')
+  .option('-d, --development', 'Build development dependencies')
+  .parse(process.argv)
+
+
+var js = join(program.out, program.name + '.js')
+var css =join(program.out, program.name + '.css')
+
+var builder = new Builder('.')
+
+builder.addLookup(join(__dirname, '../lib'))
+builder.addLookup(join(__dirname, '../components'))
+
+if (program.dev) builder.development()
+
+builder.build(function (err, obj) {
+  if (err) throw err
+
+  mkdir(program.out)
+
+  if (obj.css) write(
+    css,
+    rework(obj.css)
+      .use(rework.vars())
+      .toString(),
+    'utf8'
+  )
+
+  if (obj.js) write(js, obj.require + '\n' + obj.js, 'utf8')
+})
