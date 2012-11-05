@@ -1,0 +1,7 @@
+{
+  "name": "form-css",
+  "styles": [
+    "style.styl"
+  ],
+  "local": ["theme"]
+}

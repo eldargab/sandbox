@@ -1,6 +1,7 @@
 {
   "name": "theme",
   "styles": [
-    "style.css"
+    "reset.css",
+    "style.styl"
   ]
 }

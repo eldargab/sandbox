@@ -6,14 +6,15 @@ var PATH = require('path')
 var join = PATH.join
 var write = require('fs').writeFileSync
 var Builder = require('component-builder')
-var rework = require('rework')
+var stylus = require('stylus')
+var nib = require('nib')
 
 program
+  .usage('ccbuild <component_dir>')
   .option('-o, --out <dir>', 'Output directory', 'build')
   .option('-n, --name <file>', 'Base name for output files', 'build')
   .option('-d, --development', 'Build development dependencies')
   .parse(process.argv)
-
 
 var js = join(program.out, program.name + '.js')
 var css =join(program.out, program.name + '.css')
@@ -30,13 +31,14 @@ builder.build(function (err, obj) {
 
   mkdir(program.out)
 
-  if (obj.css) write(
-    css,
-    rework(obj.css)
-      .use(rework.vars())
-      .toString(),
-    'utf8'
-  )
+  if (obj.css) {
+    stylus(obj.css)
+      .use(nib())
+      .render(function (err, out) {
+        if (err) throw err
+        write(css, out, 'utf8')
+      })
+  }
 
-  if (obj.js) write(js, obj.require + '\n' + obj.js, 'utf8')
+  if (obj.js.slice().trim()) write(js, obj.require + '\n' + obj.js, 'utf8')
 })
