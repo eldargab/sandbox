@@ -1,11 +1,19 @@
 var express = require('express')
-var app = express()
+var app = module.exports = express()
 
-app.set('views', 'views')
+app.set('views', 'lib')
+app.engine('jade', require('jade').renderFile)
+app.locals.pretty = true
 
-app.use(express.static('public'))
+
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(app.router)
+app.use(express.errorHandler())
 
-app.listen(3000)
+require('./lib/server/routes')
+
+if (require.main === module) {
+  app.listen(process.env.PORT || 3000)
+  console.log('Listening...')
+}

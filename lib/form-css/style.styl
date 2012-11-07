@@ -1,4 +1,5 @@
 .field
+  font-size 0
   margin-bottom $line-height
 
 field-vert-padding = 4px
@@ -13,7 +14,7 @@ select
   line-height $line-height
   height $line-height
   color $color
-  padding field-vert-padding 6px
+  padding field-vert-padding
   margin-right 10px
   border field-border solid #ccc
   border-radius 3px
@@ -29,9 +30,32 @@ select
   height field-height
   line-height field-height
 
+textarea
+  height auto
+
 form label
   display inline-block
   vertical-align middle
+  font-size $font-size
   width 140px
   text-align right
-  margin-right 10px
+  margin-right 15px
+
+placeholder()
+  color #ccc
+  font-style italic
+
+input, textarea
+  &:-moz-placeholder
+    placeholder()
+  &::-webkit-input-placeholder
+    placeholder()
+  &:-ms-input-placeholder
+    placeholder()
+
+input, textarea
+  width 15em
+  &.small
+    width 2em
+  &.long
+    width 30em

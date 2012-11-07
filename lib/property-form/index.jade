@@ -18,7 +18,7 @@ form
   .field
     label Метро
     input(type='text', name='metro.station')
-    input(type='text', name='metro.distance')
+    input.small(type='text', name='metro.distance', placeholder='10')
     select(name='metro.distanceUnit')
       option(value='walk') мин. пешком
       option(value='transport') мин. транспортом
@@ -33,5 +33,5 @@ form
 
   .field
     label Описание
-    textarea(name='desc', rows=2)
+    textarea.long(name='desc', rows=2)
 
