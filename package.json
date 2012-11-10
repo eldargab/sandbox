@@ -7,7 +7,8 @@
     "jade": "~0.27.6",
     "stylus": "~0.30.1",
     "nib": "~0.8.2",
-    "monk": "~0.7.0"
+    "monk": "~0.7.0",
+    "mongo-blobs": "git://github.com/eldargab/mongo-blobs.git"
   },
   "devDependencies": {
     "stylus": "*",
