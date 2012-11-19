@@ -1,0 +1,9 @@
+{
+  "name": "css-binding",
+  "dependencies": {
+    "component/classes": "*"
+  },
+  "scripts": [
+    "index.js"
+  ]
+}

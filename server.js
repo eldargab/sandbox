@@ -11,7 +11,7 @@ app.use(express.urlencoded())
 app.use(app.router)
 app.use(express.errorHandler())
 
-require('./lib/server/routes')
+require('./routes')
 
 if (require.main === module) {
   app.listen(process.env.PORT || 3000)

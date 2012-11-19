@@ -1,7 +1,10 @@
 {
   "name": "theme",
   "styles": [
-    "reset.css",
-    "style.styl"
+    "reset.styl",
+    "mixins.styl",
+    "vars.styl",
+    "buttons.styl",
+    "form.styl"
   ]
 }

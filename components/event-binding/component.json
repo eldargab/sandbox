@@ -1,0 +1,10 @@
+{
+  "name": "event-binding",
+  "dependecies": {
+    "component/event": "*"
+  },
+  "local": ["emitter"],
+  "scripts": [
+    "index.js"
+  ]
+}

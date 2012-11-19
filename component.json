@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "necolas/normalize.css": "*"
+    "eldargab/emitter": "*"
   }
 }

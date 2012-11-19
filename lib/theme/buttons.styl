@@ -1,0 +1,74 @@
+-reset()
+  display inline-block
+  margin 0
+  text-decoration none
+
+-gradient(start, end)
+  background-color mix(start, end, 60%)
+  background linear-gradient(top, start, end)
+  background-repeat repeat-x
+  filter 'progid:DXImageTransform.Microsoft.gradient(startColorstr=%s, endColorstr=%s, GradientType=0)' % (start end)
+
+-gradient-reset()
+  background-image none
+  filter-reset()
+
+button(bgStart, bgEnd)
+  -reset()
+  -gradient bgStart bgEnd
+
+  darker = 15%
+  border 1px solid darken(bgStart, darker)
+  border-bottom 1px solid darken(bgEnd, darker)
+  box-shadow inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)
+
+  border-radius $border-radius
+
+  font-family $font-family
+  font-size $font-size
+  line-height $line-height
+  text-align center
+  padding 4px 6px
+
+  cursor pointer
+
+  &:hover
+  &.hover
+    background-color bgEnd
+    background-position 0 -15px
+    transition background-position .1s linear
+
+  &:active
+  &.active
+    -gradient-reset()
+    background-color bgEnd
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)
+
+  &:focus
+    tab-focus()
+
+  &[disabled], &.disabled
+    -gradient-reset()
+    background-color bgEnd
+    box-shadow none
+    opacity 0.6
+    cursor default
+    pointer-events none
+
+
+normal-button()
+  button(white, #e6e6e6)
+  color $color
+  text-shadow 0 1px 1px rgba(255, 255, 255, 0.75)
+
+styled-button(bgStart, bgEnd, text = white, textShadow = 0 -1px 0 rgba(0, 0, 0, 0.25))
+  button(bgStart, bgEnd)
+  color text
+  text-shadow textShadow
+
+button
+  normal-button()
+
+button.primary,
+input[type=submit]
+  styled-button(#08c, #04c)

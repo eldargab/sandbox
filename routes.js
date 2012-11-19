@@ -1,7 +1,5 @@
-var app = require('../../server')
-var db = require('../db')
-var Blobs = require('mongo-blobs')
-var blobs = new Blobs(db)
+var app = require('./server')
+var db = require('db')
 
 app.post('/property', function (req, res, next) {
   var doc = req.body

@@ -8,6 +8,10 @@ form
     input(type='text', name='url')
 
   .field
+    label Контакты
+    textarea.long(name='contacts', rows=2)
+
+  .field
     label  Класс
     select(name='class')
       option(value='A') A
@@ -24,14 +28,10 @@ form
       option(value='transport') мин. транспортом
 
   .field
-    label Площади
-    input(type='text', name='area')
-
-  .field
-    label Цены
-    input(type='text', name='price')
-
-  .field
     label Описание
     textarea.long(name='desc', rows=2)
+
+  .controls
+    button.primary Сохранить
+    button Отмена
 
